@@ -1,0 +1,72 @@
+import { BrowserRouter, Routes, Route, Outlet, useNavigate } from 'react-router-dom'
+import { Container, Navbar, Nav } from 'react-bootstrap'
+import { useContext } from 'react'
+import useLocalStorage from 'use-local-storage'
+
+import AuthContext from './contexts/AuthContext'
+
+import Login from './pages/Login'
+import ErrorPage from './pages/ErrorPage'
+import RequireAuth from './components/RequireAuth'
+import Home from './pages/Home'
+import Landing from './pages/Landing'
+
+function Layout() {
+  const authContext = useContext(AuthContext)
+  const navigate = useNavigate();
+
+  return (
+    <>
+      <Navbar bg="light" variant="light">
+        <Container>
+          <Navbar.Brand>
+            <Nav.Link href='/landing'>
+              Music Todo
+            </Nav.Link>
+          </Navbar.Brand>
+          <Nav>
+            <Nav.Link href='/home'>Home</Nav.Link>
+            {/* if user want to log out, sets token to null and navigate the user to the login page */}
+            {authContext.token === "1234" ?
+              <Nav.Link onClick={(e) => {
+                e.preventDefault();
+                authContext.setToken(null);
+                navigate('/landing');
+              }}>Logout</Nav.Link> :
+              <Nav.Link href='login'>Login</Nav.Link>
+            }
+          </Nav>
+        </Container>
+      </Navbar>
+      <Outlet />
+    </>
+
+  )
+}
+
+function Providers({ children }) {
+  const [token, setToken] = useLocalStorage("token", null);
+  return (
+    <AuthContext.Provider value={{ token, setToken }}>
+      {children}
+    </AuthContext.Provider>
+  )
+}
+
+export default function App() {
+
+  return (
+    <Providers>
+      <BrowserRouter>
+        <Routes>
+          <Route path='/' element={<Layout />}>
+            <Route path='landing' element={<Landing />} />
+            <Route path='login' element={<Login />} />
+            <Route path='home' element={<RequireAuth><Home /></RequireAuth>} />
+            <Route path='*' element={<ErrorPage />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </Providers>
+  )
+}
