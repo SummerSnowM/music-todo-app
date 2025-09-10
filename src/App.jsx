@@ -12,6 +12,7 @@ import Home from './pages/Home'
 import Landing from './pages/Landing'
 import AddTodo from './pages/AddTodo'
 import EditTodo from './pages/EditTodo'
+import History from './pages/History'
 
 function Layout() {
   const authContext = useContext(AuthContext)
@@ -28,7 +29,7 @@ function Layout() {
           </Navbar.Brand>
           <Nav>
             <Nav.Link href='/home'>Home</Nav.Link>
-            <Nav.Link href='/home'>History</Nav.Link>
+            <Nav.Link href='/history'>History</Nav.Link>
             <Nav.Link href='/addTodo'>+ New Todo</Nav.Link>
             {/* if user want to log out, sets token to null and navigate the user to the login page */}
             {authContext.token === "1234" ?
@@ -71,6 +72,7 @@ export default function App() {
             <Route path='login' element={<Login />} />
             <Route path='addTodo' element={<RequireAuth><AddTodo /></RequireAuth>} />
             <Route path='editTodo/:id' element={<RequireAuth><EditTodo /></RequireAuth>} />
+            <Route path='history' element={<RequireAuth><History /></RequireAuth>} />
             <Route path='home' element={<RequireAuth><Home /></RequireAuth>} />
             <Route path='*' element={<ErrorPage />} />
           </Route>
