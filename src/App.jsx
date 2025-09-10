@@ -11,6 +11,7 @@ import ErrorPage from './pages/ErrorPage'
 import Home from './pages/Home'
 import Landing from './pages/Landing'
 import AddTodo from './pages/AddTodo'
+import EditTodo from './pages/EditTodo'
 
 function Layout() {
   const authContext = useContext(AuthContext)
@@ -69,6 +70,7 @@ export default function App() {
             <Route path='landing' element={<Landing />} />
             <Route path='login' element={<Login />} />
             <Route path='addTodo' element={<RequireAuth><AddTodo /></RequireAuth>} />
+            <Route path='editTodo/:id' element={<RequireAuth><EditTodo /></RequireAuth>} />
             <Route path='home' element={<RequireAuth><Home /></RequireAuth>} />
             <Route path='*' element={<ErrorPage />} />
           </Route>

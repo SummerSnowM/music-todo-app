@@ -1,43 +1,47 @@
 import 'react-datepicker/dist/react-datepicker.css';
 import DatePicker from 'react-datepicker';
+import { useContext, useState } from 'react'
+import { useParams, useNavigate } from 'react-router-dom'
 import { Container, Form, Button } from 'react-bootstrap'
-import { useState, useContext } from 'react'
-import { useNavigate } from 'react-router-dom';
 import TodoContext from '../contexts/TodoContext'
 
-export default function AddTodo() {
-    const [title, setTitle] = useState("");
-    const [description, setDescription] = useState("");
-    const [deadline, setDeadline] = useState(null);
-    const [reminder, setReminder] = useState(false);
-    const [complete, setComplete] = useState(false);
-
+export default function EditTodo() {
     const navigate = useNavigate();
-    const setTodos = useContext(TodoContext).setTodos;
     const todos = useContext(TodoContext).todos;
+    const setTodos = useContext(TodoContext).setTodos;
+
+    const id = parseInt(useParams().id);
+    const todo = todos.find((todo) => todo.id === id);
+
+    const [title, setTitle] = useState(todo.title);
+    const [description, setDescription] = useState(todo.description);
+    const [reminder, setReminder] = useState(todo.reminder);
+    const [deadline, setDeadline] = useState(todo.deadline);
+    const [complete, setComplete] = useState(todo.complete);
 
     return (
-        <Container className="mt-3">
+        <Container>
             <Form onSubmit={(e) => {
                 e.preventDefault();
-                setTodos([...todos, {
-                    id: Date.now(),
-                    title,
-                    description,
-                    reminder,
-                    deadline,
-                    complete,
-                }]);
+                setTodos(todos.map((todo) => {
+                    return todo.id === id ? {
+                        ...todo,
+                        title,
+                        description,
+                        reminder,
+                        deadline,
+                        complete,
+                    } : todo;
+                }))
                 navigate('/home');
             }}>
                 <Form.Group controlId="title" className="mt-3">
                     <Form.Label>Title</Form.Label>
                     <Form.Control
                         value={title}
-                        onChange={e => setTitle(e.target.value)}
-                        placeholder="Attend violin class"
+                        onChange={(e) => setTitle(e.target.value)}
                         type="text"
-                        required
+                        placeholder={todo.title}
                     />
                 </Form.Group>
 
@@ -45,21 +49,21 @@ export default function AddTodo() {
                     <Form.Label>Description</Form.Label>
                     <Form.Control
                         value={description}
-                        onChange={e => setDescription(e.target.value)}
-                        placeholder={`1. Review previous lessons\n2. Complete workbook\n3. Consult tutor`}
+                        onChange={(e) => setDescription(e.target.value)}
                         as="textarea"
                         rows={4}
+                        placeholder={todo.description}
                     />
                 </Form.Group>
 
                 <Form.Check
-                    controlId="reminder"
                     className="mt-3"
                     checked={reminder}
                     onChange={e => setReminder(e.target.checked)}
                     label='Set Reminder'
                 />
-                {reminder && (
+
+                {todo.reminder && (
                     <Form.Group controlId="deadline" className="mt-3">
                         <Form.Label>Deadline</Form.Label>
                         <br />
@@ -75,7 +79,6 @@ export default function AddTodo() {
                 )}
 
                 <Form.Check
-                    controlId="complete"
                     className="mt-3"
                     checked={complete}
                     onChange={e => setComplete(e.target.checked)}

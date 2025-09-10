@@ -37,7 +37,7 @@ export default function Item({ todo }) {
                             <Button className="btn-sm m-1" onClick={() => changeStatus(todo.id)}>
                                 <i className='bi bi-check-lg'></i>
                             </Button>
-                            <Button className="btn-sm m-1">
+                            <Button className="btn-sm m-1" href={`editTodo/${todo.id}`}>
                                 <i className='bi bi-pencil-fill'></i>
                             </Button>
                         </>
