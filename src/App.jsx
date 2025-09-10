@@ -4,12 +4,13 @@ import { useContext } from 'react'
 import useLocalStorage from 'use-local-storage'
 
 import AuthContext from './contexts/AuthContext'
-
+import TodoContext from './contexts/TodoContext'
+import RequireAuth from './components/RequireAuth'
 import Login from './pages/Login'
 import ErrorPage from './pages/ErrorPage'
-import RequireAuth from './components/RequireAuth'
 import Home from './pages/Home'
 import Landing from './pages/Landing'
+import AddTodo from './pages/AddTodo'
 
 function Layout() {
   const authContext = useContext(AuthContext)
@@ -26,6 +27,7 @@ function Layout() {
           </Navbar.Brand>
           <Nav>
             <Nav.Link href='/home'>Home</Nav.Link>
+            <Nav.Link href='/addTodo'>+ New Todo</Nav.Link>
             {/* if user want to log out, sets token to null and navigate the user to the login page */}
             {authContext.token === "1234" ?
               <Nav.Link onClick={(e) => {
@@ -46,9 +48,12 @@ function Layout() {
 
 function Providers({ children }) {
   const [token, setToken] = useLocalStorage("token", null);
+  const [todos, setTodos] = useLocalStorage('todos', []);
   return (
     <AuthContext.Provider value={{ token, setToken }}>
-      {children}
+      <TodoContext.Provider value={{ todos, setTodos }}>
+        {children}
+      </TodoContext.Provider>
     </AuthContext.Provider>
   )
 }
@@ -62,6 +67,7 @@ export default function App() {
           <Route path='/' element={<Layout />}>
             <Route path='landing' element={<Landing />} />
             <Route path='login' element={<Login />} />
+            <Route path='addTodo' element={<RequireAuth><AddTodo /></RequireAuth>} />
             <Route path='home' element={<RequireAuth><Home /></RequireAuth>} />
             <Route path='*' element={<ErrorPage />} />
           </Route>
