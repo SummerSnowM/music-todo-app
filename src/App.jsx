@@ -27,6 +27,7 @@ function Layout() {
           </Navbar.Brand>
           <Nav>
             <Nav.Link href='/home'>Home</Nav.Link>
+            <Nav.Link href='/home'>History</Nav.Link>
             <Nav.Link href='/addTodo'>+ New Todo</Nav.Link>
             {/* if user want to log out, sets token to null and navigate the user to the login page */}
             {authContext.token === "1234" ?

@@ -1,9 +1,9 @@
-import { Container } from 'react-bootstrap'
-
+import { Container, Row, Col } from 'react-bootstrap'
+import RecentItems from '../components/RecentItems'
 export default function Home() {
     return (
         <Container>
-            <h1>test</h1>
+            <RecentItems />
         </Container>
     )
 }

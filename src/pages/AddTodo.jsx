@@ -1,7 +1,8 @@
 import 'react-datepicker/dist/react-datepicker.css';
-import { Container, Form, Button } from 'react-bootstrap'
 import DatePicker from 'react-datepicker';
+import { Container, Form, Button } from 'react-bootstrap'
 import { useState, useContext } from 'react'
+import { useNavigate } from 'react-router-dom';
 import TodoContext from '../contexts/TodoContext'
 
 export default function AddTodo() {
@@ -9,26 +10,32 @@ export default function AddTodo() {
     const [description, setDescription] = useState("");
     const [deadline, setDeadline] = useState(null);
     const [reminder, setReminder] = useState(false);
+    const [complete, setComplete] = useState(false);
 
+    const navigate = useNavigate();
     const setTodos = useContext(TodoContext).setTodos;
     const todos = useContext(TodoContext).todos;
 
 
-    const addTodo = () => {
-        const newTodo = {
-            id: Date.now(),
-            title,
-            description,
-            reminder,
-            deadline,
-        }
+    // const addTodo = () => {
 
-        setTodos(...todos, newTodo);
-    }
+
+    // }
 
     return (
         <Container className="mt-3">
-            <Form onSubmit={addTodo}>
+            <Form onSubmit={(e) => {
+                e.preventDefault();
+                setTodos([...todos, {
+                    id: Date.now(),
+                    title,
+                    description,
+                    reminder,
+                    deadline,
+                    complete,
+                }]);
+                navigate('/home');
+            }}>
                 <Form.Group controlId="title" className="mt-3">
                     <Form.Label>Title</Form.Label>
                     <Form.Control
@@ -71,6 +78,13 @@ export default function AddTodo() {
                         />
                     </Form.Group>
                 )}
+
+                <Form.Check
+                    className="mt-3"
+                    checked={complete}
+                    onChange={e => setComplete(e.target.checked)}
+                    label='Mark as Completed'
+                />
 
                 <Button variant="primary" bg="light" className="mt-3" type="submit">
                     Submit
