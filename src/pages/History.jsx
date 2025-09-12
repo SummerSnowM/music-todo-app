@@ -9,10 +9,10 @@ export default function History() {
     return (
         <Container className="mt-4">
             <Row md={1}>
-                {todos.map((todo) => {
+                {todos.map((todo, index) => {
                     return (
                         <>
-                            <Col className="mt-3">
+                            <Col key={index} className="mt-3">
                                 <Item todo={todo} />
                             </Col>
                         </>

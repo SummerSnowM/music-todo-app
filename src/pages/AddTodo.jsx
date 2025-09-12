@@ -53,7 +53,6 @@ export default function AddTodo() {
                 </Form.Group>
 
                 <Form.Check
-                    controlId="reminder"
                     className="mt-3"
                     checked={reminder}
                     onChange={e => setReminder(e.target.checked)}
@@ -75,7 +74,6 @@ export default function AddTodo() {
                 )}
 
                 <Form.Check
-                    controlId="complete"
                     className="mt-3"
                     checked={complete}
                     onChange={e => setComplete(e.target.checked)}
