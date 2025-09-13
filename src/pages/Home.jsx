@@ -22,7 +22,7 @@ export default function Home() {
 
     useEffect(() => {
         setShowReminder(false);
-        const urgentTodos = todos.filter((todo) => difference(new Date(todo.deadline).getTime(), Date.now()) <= 1 && !todo.complete);
+        const urgentTodos = todos.filter((todo) => todo.deadline && difference(new Date(todo.deadline).getTime(), Date.now()) <= 1 && !todo.complete);
 
         //placeholders
         let a = 0, b = 0, c = 0;

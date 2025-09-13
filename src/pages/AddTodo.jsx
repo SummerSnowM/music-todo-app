@@ -8,6 +8,7 @@ import TodoContext from '../contexts/TodoContext'
 export default function AddTodo() {
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
+    const [duration, setDuration] = useState(0);
     const [deadline, setDeadline] = useState(null);
     const [reminder, setReminder] = useState(false);
     const [complete, setComplete] = useState(false);
@@ -49,6 +50,17 @@ export default function AddTodo() {
                         placeholder={`1. Review previous lessons\n2. Complete workbook\n3. Consult tutor`}
                         as="textarea"
                         rows={4}
+                    />
+                </Form.Group>
+
+                <Form.Group controlId="duration" className="mt-3">
+                    <Form.Label>Duration</Form.Label>
+                    <Form.Control
+                        value={duration}
+                        onChange={e => setDuration(e.target.value)}
+                        min={1}
+                        type="number"
+                        required
                     />
                 </Form.Group>
 

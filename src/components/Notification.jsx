@@ -1,19 +1,33 @@
-import { Alert } from 'react-bootstrap'
+import { ToastContainer, Toast } from 'react-bootstrap'
 
 export default function Notification({ tomorrow, today, overdue }) {
     return (
         <>
-            {tomorrow != 0 && (
-                <Alert variant="warning">You have {tomorrow} task(s) due tomorrow!</Alert>
-            )}
+            <ToastContainer position="bottom-end">
+                <Toast>
+                    <Toast.Header>
+                        <strong className="me-auto">Urgent Reminders</strong>
+                    </Toast.Header>
+                    <Toast.Body>
+                        {tomorrow != 0 && (
+                            <p className="text-warning">
+                                You have {tomorrow} task(s) due <strong>tomorrow!</strong>
+                            </p>
 
-            {today != 0 && (
-                <Alert variant="warning">You have {today} task(s) due today!</Alert>
-            )}
-
-            {overdue != 0 && (
-                <Alert variant="danger">You have {overdue} task(s) overdue tasks!</Alert>
-            )}
+                        )}
+                        {today != 0 && (
+                            <p className="text-warning">
+                                You have {today} task(s) due <strong>today!</strong>
+                            </p>
+                        )}
+                        {overdue != 0 && (
+                            <p className="text-danger">
+                                You have {overdue} task(s) <strong>overdue</strong> tasks!
+                            </p>
+                        )}
+                    </Toast.Body>
+                </Toast>
+            </ToastContainer>
         </>
 
     )

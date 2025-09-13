@@ -15,6 +15,7 @@ export default function EditTodo() {
 
     const [title, setTitle] = useState(todo.title);
     const [description, setDescription] = useState(todo.description);
+    const [duration, setDuration] = useState(todo.duration);
     const [reminder, setReminder] = useState(todo.reminder);
     const [deadline, setDeadline] = useState(todo.deadline);
     const [complete, setComplete] = useState(todo.complete);
@@ -53,6 +54,17 @@ export default function EditTodo() {
                         as="textarea"
                         rows={4}
                         placeholder={todo.description}
+                    />
+                </Form.Group>
+
+                <Form.Group controlId="duration" className="mt-3">
+                    <Form.Label>Duration</Form.Label>
+                    <Form.Control
+                        value={duration}
+                        onChange={e => setDuration(e.target.value)}
+                        min={1}
+                        type="number"
+                        required
                     />
                 </Form.Group>
 
