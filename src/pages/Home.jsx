@@ -1,11 +1,14 @@
 import { Container, Row, Col } from 'react-bootstrap'
 import TodoContext from '../contexts/TodoContext'
 import { useContext, useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
 import Item from '../components/Item'
 import Notification from '../components/Notification'
 
 export default function Home() {
-    const todos = useContext(TodoContext).todos;
+    // const todos = useContext(TodoContext).todos;
+    const todos = useSelector((state) => state.todo);
+    // console.log(todos);
     const recentTodos = todos.slice(-4);
 
     const [showReminder, setShowReminder] = useState(false)

@@ -1,9 +1,11 @@
 import 'react-datepicker/dist/react-datepicker.css';
 import DatePicker from 'react-datepicker';
 import { Container, Form, Button } from 'react-bootstrap'
-import { useState, useContext } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
-import TodoContext from '../contexts/TodoContext'
+
+import { useDispatch } from 'react-redux'
+import { addTodo } from '../slices/todoSlice'
 
 export default function AddTodo() {
     const [title, setTitle] = useState("");
@@ -14,23 +16,26 @@ export default function AddTodo() {
     const [complete, setComplete] = useState(false);
 
     const navigate = useNavigate();
-    const setTodos = useContext(TodoContext).setTodos;
-    const todos = useContext(TodoContext).todos;
+    const dispatch = useDispatch();
 
+    const addNewTodo = (e) => {
+        e.preventDefault();
+        const newItem = {
+            id: Date.now(),
+            title,
+            description,
+            reminder,
+            deadline,
+            complete,
+            duration,
+        }
+        dispatch(addTodo(newItem));
+        navigate('/home');
+    }
+    
     return (
         <Container className="mt-3">
-            <Form onSubmit={(e) => {
-                e.preventDefault();
-                setTodos([...todos, {
-                    id: Date.now(),
-                    title,
-                    description,
-                    reminder,
-                    deadline,
-                    complete,
-                }]);
-                navigate('/home');
-            }}>
+            <Form onSubmit={addNewTodo}>
                 <Form.Group controlId="title" className="mt-3">
                     <Form.Label>Title</Form.Label>
                     <Form.Control
