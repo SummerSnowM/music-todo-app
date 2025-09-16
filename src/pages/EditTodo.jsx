@@ -62,7 +62,7 @@ export default function EditTodo() {
                 </Form.Group>
 
                 <Form.Group controlId="duration" className="mt-3">
-                    <Form.Label>Duration</Form.Label>
+                    <Form.Label>Duration (hours)</Form.Label>
                     <Form.Control
                         value={duration}
                         onChange={e => setDuration(e.target.value)}
@@ -78,8 +78,7 @@ export default function EditTodo() {
                     onChange={e => setReminder(e.target.checked)}
                     label='Set Reminder'
                 />
-
-                {todo.reminder && (
+                {reminder && (
                     <Form.Group controlId="deadline" className="mt-3">
                         <Form.Label>Deadline</Form.Label>
                         <br />

@@ -59,7 +59,7 @@ export default function AddTodo() {
                 </Form.Group>
 
                 <Form.Group controlId="duration" className="mt-3">
-                    <Form.Label>Duration</Form.Label>
+                    <Form.Label>Duration (hours)</Form.Label>
                     <Form.Control
                         value={duration}
                         onChange={e => setDuration(e.target.value)}

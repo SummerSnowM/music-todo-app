@@ -31,6 +31,7 @@ export default function Item({ todo }) {
                     {todo.reminder && (
                         <Card.Text><strong>Deadline: </strong>{deadline.toLocaleDateString()}</Card.Text>
                     )}
+                    <Card.Text><strong>Duration: </strong> {todo.duration} hour(s)</Card.Text>
                     <Badge pill bg={color} style={{ width: '100px' }}>{!todo.complete && 'Not'} Completed</Badge>
 
                     {!todo.complete ? (
