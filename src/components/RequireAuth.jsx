@@ -5,7 +5,7 @@ import AuthContext from '../contexts/AuthContext'
 export default function RequireAuth({ children }) {
     const authContext = useContext(AuthContext);
     if (authContext.token !== "1234") {
-        return <Navigate to='/login' replace />
+        return <Navigate to='/' replace />
     }
     return children;
 }

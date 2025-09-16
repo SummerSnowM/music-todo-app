@@ -22,7 +22,7 @@ export default function Notification({ tomorrow, today, overdue }) {
                         )}
                         {overdue != 0 && (
                             <p className="text-danger">
-                                You have {overdue} task(s) <strong>overdue</strong> tasks!
+                                You have {overdue} task(s) <strong>overdue!</strong>
                             </p>
                         )}
                     </Toast.Body>

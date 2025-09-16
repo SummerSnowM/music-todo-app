@@ -24,7 +24,7 @@ function Layout() {
       <Navbar bg="light" variant="light">
         <Container>
           <Navbar.Brand>
-            <Nav.Link as={Link} to='/landing'>
+            <Nav.Link as={Link} to='/'>
               Music Todo
             </Nav.Link>
           </Navbar.Brand>
@@ -37,7 +37,7 @@ function Layout() {
               <Nav.Link onClick={(e) => {
                 e.preventDefault();
                 authContext.setToken(null);
-                navigate('/landing');
+                navigate('/');
               }}>Logout</Nav.Link> :
               <Nav.Link as={Link} to='/login'>Login</Nav.Link>
             }
@@ -62,12 +62,12 @@ function Providers({ children }) {
 export default function App() {
 
   return (
-    <Providers>
-      <Provider store={store}>
+    <Provider store={store}>
+      <Providers>
         <BrowserRouter>
           <Routes>
             <Route path='/' element={<Layout />}>
-              <Route path='landing' element={<Landing />} />
+              <Route index element={<Landing />} />
               <Route path='login' element={<Login />} />
               <Route path='addTodo' element={<RequireAuth><AddTodo /></RequireAuth>} />
               <Route path='editTodo/:id' element={<RequireAuth><EditTodo /></RequireAuth>} />
@@ -77,7 +77,8 @@ export default function App() {
             </Route>
           </Routes>
         </BrowserRouter>
-      </Provider>
-    </Providers>
+      </Providers>
+    </Provider>
+
   )
 }

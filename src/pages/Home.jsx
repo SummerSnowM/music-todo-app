@@ -1,14 +1,11 @@
 import { Container, Row, Col } from 'react-bootstrap'
-import TodoContext from '../contexts/TodoContext'
-import { useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import Item from '../components/Item'
 import Notification from '../components/Notification'
 
 export default function Home() {
-    // const todos = useContext(TodoContext).todos;
     const todos = useSelector((state) => state.todo);
-    // console.log(todos);
     const recentTodos = todos.slice(-4);
 
     const [showReminder, setShowReminder] = useState(false)
@@ -24,7 +21,6 @@ export default function Home() {
     }
 
     useEffect(() => {
-        setShowReminder(false);
         const urgentTodos = todos.filter((todo) => todo.deadline && difference(new Date(todo.deadline).getTime(), Date.now()) <= 1 && !todo.complete);
 
         //placeholders
@@ -44,11 +40,16 @@ export default function Home() {
             //show and disappear reminder box
             const reminder = setTimeout(() => {
                 setShowReminder(true);
-                const closeReminder = setTimeout(() => {
-                    setShowReminder(false)
-                }, 7000)
             }, 300);
-            return () => clearTimeout(reminder)
+
+            const closeReminder = setTimeout(() => {
+                setShowReminder(false)
+            }, 7000)
+
+            return () => {
+                clearTimeout(reminder);
+                clearTimeout(closeReminder);
+            }
         }
     }, [todos]);
 
