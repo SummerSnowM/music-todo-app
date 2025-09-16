@@ -1,10 +1,11 @@
-import { BrowserRouter, Routes, Route, Outlet, useNavigate } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Outlet, useNavigate, Link } from 'react-router-dom'
 import { Container, Navbar, Nav } from 'react-bootstrap'
 import { useContext } from 'react'
+import { store } from './store'
+import { Provider } from 'react-redux'
 import useLocalStorage from 'use-local-storage'
 
 import AuthContext from './contexts/AuthContext'
-import TodoContext from './contexts/TodoContext'
 import RequireAuth from './components/RequireAuth'
 import Login from './pages/Login'
 import ErrorPage from './pages/ErrorPage'
@@ -23,14 +24,14 @@ function Layout() {
       <Navbar bg="light" variant="light">
         <Container>
           <Navbar.Brand>
-            <Nav.Link href='/landing'>
+            <Nav.Link as={Link} to='/landing'>
               Music Todo
             </Nav.Link>
           </Navbar.Brand>
           <Nav>
-            <Nav.Link href='/home'>Home</Nav.Link>
-            <Nav.Link href='/history'>History</Nav.Link>
-            <Nav.Link href='/addTodo'>+ New Todo</Nav.Link>
+            <Nav.Link as={Link} to='/home'>Home</Nav.Link>
+            <Nav.Link as={Link} to='/history'>History</Nav.Link>
+            <Nav.Link as={Link} to='/addTodo'>+ New Todo</Nav.Link>
             {/* if user want to log out, sets token to null and navigate the user to the login page */}
             {authContext.token === "1234" ?
               <Nav.Link onClick={(e) => {
@@ -38,7 +39,7 @@ function Layout() {
                 authContext.setToken(null);
                 navigate('/landing');
               }}>Logout</Nav.Link> :
-              <Nav.Link href='login'>Login</Nav.Link>
+              <Nav.Link as={Link} to='/login'>Login</Nav.Link>
             }
           </Nav>
         </Container>
@@ -51,12 +52,9 @@ function Layout() {
 
 function Providers({ children }) {
   const [token, setToken] = useLocalStorage("token", null);
-  const [todos, setTodos] = useLocalStorage('todos', []);
   return (
     <AuthContext.Provider value={{ token, setToken }}>
-      <TodoContext.Provider value={{ todos, setTodos }}>
-        {children}
-      </TodoContext.Provider>
+      {children}
     </AuthContext.Provider>
   )
 }
@@ -65,19 +63,21 @@ export default function App() {
 
   return (
     <Providers>
-      <BrowserRouter>
-        <Routes>
-          <Route path='/' element={<Layout />}>
-            <Route path='landing' element={<Landing />} />
-            <Route path='login' element={<Login />} />
-            <Route path='addTodo' element={<RequireAuth><AddTodo /></RequireAuth>} />
-            <Route path='editTodo/:id' element={<RequireAuth><EditTodo /></RequireAuth>} />
-            <Route path='history' element={<RequireAuth><History /></RequireAuth>} />
-            <Route path='home' element={<RequireAuth><Home /></RequireAuth>} />
-            <Route path='*' element={<ErrorPage />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
+      <Provider store={store}>
+        <BrowserRouter>
+          <Routes>
+            <Route path='/' element={<Layout />}>
+              <Route path='landing' element={<Landing />} />
+              <Route path='login' element={<Login />} />
+              <Route path='addTodo' element={<RequireAuth><AddTodo /></RequireAuth>} />
+              <Route path='editTodo/:id' element={<RequireAuth><EditTodo /></RequireAuth>} />
+              <Route path='history' element={<RequireAuth><History /></RequireAuth>} />
+              <Route path='home' element={<RequireAuth><Home /></RequireAuth>} />
+              <Route path='*' element={<ErrorPage />} />
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      </Provider>
     </Providers>
   )
 }

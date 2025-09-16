@@ -1,40 +1,45 @@
 import 'react-datepicker/dist/react-datepicker.css';
 import DatePicker from 'react-datepicker';
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { Container, Form, Button } from 'react-bootstrap'
-import TodoContext from '../contexts/TodoContext'
+import { useSelector, useDispatch } from 'react-redux'
+import { editTodo } from '../slices/todoSlice'
 
 export default function EditTodo() {
     const navigate = useNavigate();
-    const todos = useContext(TodoContext).todos;
-    const setTodos = useContext(TodoContext).setTodos;
+    const dispatch = useDispatch();
+
+    const todos = useSelector((state) => state.todo);
 
     const id = parseInt(useParams().id);
     const todo = todos.find((todo) => todo.id === id);
 
     const [title, setTitle] = useState(todo.title);
     const [description, setDescription] = useState(todo.description);
+    const [duration, setDuration] = useState(todo.duration);
     const [reminder, setReminder] = useState(todo.reminder);
     const [deadline, setDeadline] = useState(todo.deadline);
     const [complete, setComplete] = useState(todo.complete);
 
+    const editTodoItem = (e) => {
+        e.preventDefault();
+        const replacementItem = {
+            id,
+            title,
+            description,
+            reminder,
+            deadline,
+            complete,
+            duration,
+        }
+        dispatch(editTodo({ id: todo.id, item: replacementItem }));
+        navigate('/home');
+    }
+
     return (
         <Container>
-            <Form onSubmit={(e) => {
-                e.preventDefault();
-                setTodos(todos.map((todo) => {
-                    return todo.id === id ? {
-                        ...todo,
-                        title,
-                        description,
-                        reminder,
-                        deadline,
-                        complete,
-                    } : todo;
-                }))
-                navigate('/home');
-            }}>
+            <Form onSubmit={editTodoItem}>
                 <Form.Group controlId="title" className="mt-3">
                     <Form.Label>Title</Form.Label>
                     <Form.Control
@@ -53,6 +58,17 @@ export default function EditTodo() {
                         as="textarea"
                         rows={4}
                         placeholder={todo.description}
+                    />
+                </Form.Group>
+
+                <Form.Group controlId="duration" className="mt-3">
+                    <Form.Label>Duration</Form.Label>
+                    <Form.Control
+                        value={duration}
+                        onChange={e => setDuration(e.target.value)}
+                        min={1}
+                        type="number"
+                        required
                     />
                 </Form.Group>
 

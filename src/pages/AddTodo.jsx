@@ -1,35 +1,41 @@
 import 'react-datepicker/dist/react-datepicker.css';
 import DatePicker from 'react-datepicker';
 import { Container, Form, Button } from 'react-bootstrap'
-import { useState, useContext } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
-import TodoContext from '../contexts/TodoContext'
+
+import { useDispatch } from 'react-redux'
+import { addTodo } from '../slices/todoSlice'
 
 export default function AddTodo() {
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
+    const [duration, setDuration] = useState(0);
     const [deadline, setDeadline] = useState(null);
     const [reminder, setReminder] = useState(false);
     const [complete, setComplete] = useState(false);
 
     const navigate = useNavigate();
-    const setTodos = useContext(TodoContext).setTodos;
-    const todos = useContext(TodoContext).todos;
+    const dispatch = useDispatch();
 
+    const addNewTodo = (e) => {
+        e.preventDefault();
+        const newItem = {
+            id: Date.now(),
+            title,
+            description,
+            reminder,
+            deadline,
+            complete,
+            duration,
+        }
+        dispatch(addTodo(newItem));
+        navigate('/home');
+    }
+    
     return (
         <Container className="mt-3">
-            <Form onSubmit={(e) => {
-                e.preventDefault();
-                setTodos([...todos, {
-                    id: Date.now(),
-                    title,
-                    description,
-                    reminder,
-                    deadline,
-                    complete,
-                }]);
-                navigate('/home');
-            }}>
+            <Form onSubmit={addNewTodo}>
                 <Form.Group controlId="title" className="mt-3">
                     <Form.Label>Title</Form.Label>
                     <Form.Control
@@ -49,6 +55,17 @@ export default function AddTodo() {
                         placeholder={`1. Review previous lessons\n2. Complete workbook\n3. Consult tutor`}
                         as="textarea"
                         rows={4}
+                    />
+                </Form.Group>
+
+                <Form.Group controlId="duration" className="mt-3">
+                    <Form.Label>Duration</Form.Label>
+                    <Form.Control
+                        value={duration}
+                        onChange={e => setDuration(e.target.value)}
+                        min={1}
+                        type="number"
+                        required
                     />
                 </Form.Group>
 
